@@ -1,15 +1,20 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 const SearchBar = ({ placeholder = "Search tasks ...", onSearch }) => {
   return (
-    <div className="flex-1 max-w-md mx-8">
+    <div className="w-80">
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+          <Image 
+            src="/assets/icons/Search.svg" 
+            alt="Search" 
+            width={16} 
+            height={16}
+            className="text-gray-500"
+          />
         </div>
         <input
           type="text"

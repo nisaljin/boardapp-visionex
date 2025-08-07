@@ -11,8 +11,8 @@ export default function Home() {
     console.log('Create new board clicked');
   };
 
-  const handleSettings = () => {
-    console.log('Settings clicked');
+  const handleFilter = () => {
+    console.log('Filter clicked');
   };
 
   const handleNotifications = () => {
@@ -28,7 +28,7 @@ export default function Home() {
       <Header 
         onSearch={handleSearch}
         onCreateBoard={handleCreateBoard}
-        onSettings={handleSettings}
+        onFilter={handleFilter}
         onNotifications={handleNotifications}
         onUserProfile={handleUserProfile}
       />
