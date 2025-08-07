@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 
 const NotificationBell = ({ onClick, hasNotifications = true }) => {
   return (
@@ -10,16 +9,20 @@ const NotificationBell = ({ onClick, hasNotifications = true }) => {
         onClick={onClick}
         className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
       >
-        <Image 
-          src="/assets/icons/Bell.svg" 
-          alt="Notifications" 
-          width={24} 
-          height={24}
+        <div 
+          className="w-6 h-6"
+          style={{
+            WebkitMask: 'url(/assets/icons/Bell.png) no-repeat center',
+            WebkitMaskSize: 'contain',
+            mask: 'url(/assets/icons/Bell.png) no-repeat center',
+            maskSize: 'contain',
+            backgroundColor: '#B1B5C3'
+          }}
         />
       </button>
       {/* Notification dot */}
       {hasNotifications && (
-        <div className="absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full"></div>
+        <div className="absolute top-3 right-2.5 w-2 h-2 bg-orange-500 rounded-full"></div>
       )}
     </div>
   );

@@ -17,7 +17,7 @@ const UserProfile = ({ onClick, imageUrl, userName }) => {
         />
       ) : (
         <Image 
-          src="/assets/icons/User.svg" 
+          src="/assets/icons/profileuser.png" 
           alt="User Profile" 
           width={16} 
           height={16}

@@ -7,7 +7,8 @@ import {
   CreateBoardButton,
   FilterIcon,
   NotificationBell,
-  UserProfile
+  UserProfile,
+  SettingsButton
 } from './header/index';
 
 const Header = ({ 
@@ -16,6 +17,7 @@ const Header = ({
   onFilter,
   onNotifications, 
   onUserProfile,
+  onSettings,
   hasNotifications = true,
   userImageUrl,
   userName
@@ -26,19 +28,21 @@ const Header = ({
         {/* Left side - Logo */}
         <Logo />
 
-        {/* Center - Create Board Button and Search Bar */}
-        <div className="flex items-center space-x-4 flex-1 justify-center">
+        {/* Center - Create Board Button, Search Bar, and Settings */}
+        <div className="flex items-center space-x-4 flex-1 justify-end">
           <CreateBoardButton onClick={onCreateBoard} />
           <SearchBar onSearch={onSearch} />
+          <div className="w-2"></div> 
+          <SettingsButton onClick={onSettings} />
         </div>
 
-        {/* Right side - Filter, Notifications, User Profile */}
-        <div className="flex items-center space-x-4">
-          <FilterIcon onClick={onFilter} />
+        {/* Right side - Notifications and User Profile */}
+        <div className="flex items-center">
           <NotificationBell onClick={onNotifications} hasNotifications={hasNotifications} />
+          <div className="w-2"></div>
           <UserProfile 
             onClick={onUserProfile} 
-            imageUrl={userImageUrl} 
+            imageUrl={userImageUrl || '/assets/icons/profileuser.png'} 
             userName={userName} 
           />
         </div>

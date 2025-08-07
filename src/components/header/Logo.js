@@ -10,7 +10,7 @@ const Logo = () => {
       />
       <div className="text-lg font-semibold">
         <span className="text-gray-700">Board</span>
-        <span className="text-blue-500"> App</span>
+        <span className="text-[#3772FF]"> App</span>
       </div>
     </div>
   );

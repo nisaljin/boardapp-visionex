@@ -7,15 +7,24 @@ const CreateBoardButton = ({ onClick }) => {
   return (
     <button 
       onClick={onClick}
-      className="flex items-center space-x-3 bg-blue-500 text-white px-4 py-3 rounded-md hover:bg-blue-600 transition-colors"
+      className="flex items-center justify-center bg-[#3772FF] text-white hover:bg-blue-600 transition-colors font-poppins font-semibold text-xs"
+      style={{
+        width: '170px',
+        height: '48px',
+        padding: '4px 12px',
+        borderRadius: '6px',
+        gap: '12px'
+      }}
     >
-      <span className="text-sm font-medium">Create new board</span>
+      <span className="text-white text-left">
+        Create new board
+      </span>
       <Image 
-        src="/assets/icons/Plus 2.svg" 
+        src="/assets/icons/Plus 2.png" 
         alt="Plus" 
-        width={20} 
-        height={20}
-        className="filter brightness-0 invert"
+        width={48} 
+        height={48}
+        className="filter brightness-0 invert w-6 h-6"
       />
     </button>
   );
