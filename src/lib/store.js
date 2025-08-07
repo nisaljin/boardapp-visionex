@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { arrayMove } from '@dnd-kit/sortable';
 
 // Initial board data structure
 const initialBoardData = {
@@ -98,16 +99,33 @@ const useBoardStore = create(
       
       // Move task between columns
       moveTask: (taskId, fromColumnId, toColumnId) => {
+        console.log('moveTask called with:', { taskId, fromColumnId, toColumnId });
+        
         set((state) => {
           const fromColumn = state.boardData.columns.find(col => col.id === fromColumnId);
           const toColumn = state.boardData.columns.find(col => col.id === toColumnId);
           
-          if (!fromColumn || !toColumn) return state;
+          console.log('Found columns:', { 
+            fromColumn: fromColumn?.id, 
+            toColumn: toColumn?.id,
+            fromColumnTasks: fromColumn?.tasks.length,
+            toColumnTasks: toColumn?.tasks.length
+          });
+          
+          if (!fromColumn || !toColumn) {
+            console.log('Column not found, returning state');
+            return state;
+          }
           
           const task = fromColumn.tasks.find(t => t.id === taskId);
-          if (!task) return state;
+          if (!task) {
+            console.log('Task not found, returning state');
+            return state;
+          }
           
-          return {
+          console.log('Found task:', task.title, 'Moving from', fromColumnId, 'to', toColumnId);
+          
+          const newState = {
             boardData: {
               ...state.boardData,
               columns: state.boardData.columns.map((column) => {
@@ -120,13 +138,63 @@ const useBoardStore = create(
                 if (column.id === toColumnId) {
                   return {
                     ...column,
-                    tasks: [...column.tasks, task]
+                    tasks: [task, ...column.tasks]  // Add to the beginning instead of end
                   };
                 }
                 return column;
               })
             }
           };
+          
+          console.log('New state columns:', newState.boardData.columns.map(col => ({
+            id: col.id,
+            taskCount: col.tasks.length
+          })));
+          
+          return newState;
+        });
+      },
+
+      // Reorder tasks within the same column
+      reorderTasksInColumn: (columnId, activeTaskId, overTaskId) => {
+        console.log('reorderTasksInColumn called with:', { columnId, activeTaskId, overTaskId });
+        
+        set((state) => {
+          const column = state.boardData.columns.find(col => col.id === columnId);
+          
+          if (!column) {
+            console.log('Column not found, returning state');
+            return state;
+          }
+          
+          const tasks = [...column.tasks];
+          const activeIndex = tasks.findIndex(task => task.id === activeTaskId);
+          const overIndex = tasks.findIndex(task => task.id === overTaskId);
+          
+          if (activeIndex === -1 || overIndex === -1) {
+            console.log('Task not found in column, returning state');
+            return state;
+          }
+          
+          console.log('Reordering from index', activeIndex, 'to index', overIndex);
+          
+          // Use arrayMove from @dnd-kit/sortable
+          const reorderedTasks = arrayMove(tasks, activeIndex, overIndex);
+          
+          const newState = {
+            boardData: {
+              ...state.boardData,
+              columns: state.boardData.columns.map((col) => 
+                col.id === columnId 
+                  ? { ...col, tasks: reorderedTasks }
+                  : col
+              )
+            }
+          };
+          
+          console.log('Tasks reordered in column:', columnId);
+          
+          return newState;
         });
       },
       

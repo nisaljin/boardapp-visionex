@@ -5,6 +5,10 @@ import BoardColumn from './BoardColumn';
 const DroppableColumn = ({ column, tasks, onAddTask }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: column.id,
+    data: {
+      type: 'column',
+      column
+    }
   });
 
   return (

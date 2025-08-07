@@ -13,7 +13,13 @@ const TaskCard = ({ task, isHighlighted = false }) => {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: task.id });
+  } = useSortable({ 
+    id: task.id,
+    data: {
+      type: 'task',
+      task
+    }
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),

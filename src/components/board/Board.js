@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   DndContext,
   DragOverlay,
-  closestCorners,
+  closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -28,6 +28,7 @@ const Board = () => {
     getTasksByColumn,
     addTask,
     moveTask,
+    reorderTasksInColumn,
     _hasHydrated 
   } = useBoardStore();
 
@@ -69,8 +70,11 @@ const Board = () => {
     if (_hasHydrated && !isInitialized) {
       // Check if we have data in localStorage
       const hasStoredData = boardData.columns.some(col => col.tasks.length > 0);
+      console.log('🔍 Has stored data:', hasStoredData);
+      console.log('📊 Board data:', boardData);
       
       if (!hasStoredData) {
+        console.log('🌐 Fetching board data from API...');
         fetchBoardData();
       }
       
@@ -98,7 +102,9 @@ const Board = () => {
   // Handle drag start
   const handleDragStart = (event) => {
     const { active } = event;
+    console.log('🚀 Drag start event:', { active });
     const task = getAllTasks().find(t => t.id === active.id);
+    console.log('🎯 Found task:', task);
     setActiveTask(task);
   };
 
@@ -107,27 +113,80 @@ const Board = () => {
     const { active, over } = event;
     setActiveTask(null);
 
-    if (!over) return;
+    console.log('Drag end event:', { active, over });
+
+    if (!over) {
+      console.log('No over target, returning');
+      return;
+    }
 
     const activeId = active.id;
     const overId = over.id;
 
-    if (activeId === overId) return;
+    console.log('Active ID:', activeId, 'Over ID:', overId);
 
-    // Find the source and destination columns
-    const sourceColumn = boardData.columns.find(col => 
+    if (activeId === overId) {
+      console.log('Same ID, returning');
+      return;
+    }
+
+    // Find the active task and its current column
+    const activeTask = getAllTasks().find(task => task.id === activeId);
+    const activeColumn = boardData.columns.find(col => 
       col.tasks.some(task => task.id === activeId)
     );
-    const destinationColumn = boardData.columns.find(col => col.id === overId);
 
-    if (sourceColumn && destinationColumn) {
-      moveTask(activeId, sourceColumn.id, destinationColumn.id);
+    if (!activeTask || !activeColumn) {
+      console.log('Active task or column not found');
+      return;
+    }
+
+    // Determine the target based on over.data
+    const overData = over.data.current;
+    
+    if (overData?.type === 'column') {
+      // Dropped on a column - move to end of that column
+      const targetColumnId = overId;
+      if (activeColumn.id !== targetColumnId) {
+        console.log('Moving task to column:', targetColumnId);
+        moveTask(activeId, activeColumn.id, targetColumnId);
+      }
+    } else if (overData?.type === 'task') {
+      // Dropped on another task
+      const overTask = overData.task;
+      const overColumn = boardData.columns.find(col => 
+        col.tasks.some(task => task.id === overId)
+      );
+
+      if (!overColumn) {
+        console.log('Over column not found');
+        return;
+      }
+
+      if (activeColumn.id === overColumn.id) {
+        // Same column - reorder
+        console.log('Reordering within column:', activeColumn.id);
+        reorderTasksInColumn(activeColumn.id, activeId, overId);
+      } else {
+        // Different column - move task
+        console.log('Moving task from', activeColumn.id, 'to', overColumn.id);
+        moveTask(activeId, activeColumn.id, overColumn.id);
+      }
+    } else {
+      // Fallback - try to determine column by overId
+      const overColumn = boardData.columns.find(col => col.id === overId);
+      if (overColumn && activeColumn.id !== overColumn.id) {
+        console.log('Fallback: Moving task to column:', overId);
+        moveTask(activeId, activeColumn.id, overId);
+      }
     }
   };
 
   // Get all tasks from all columns
   const getAllTasks = () => {
-    return boardData.columns.flatMap(column => column.tasks);
+    const allTasks = boardData.columns.flatMap(column => column.tasks);
+    console.log('📋 Total tasks:', allTasks.length);
+    return allTasks;
   };
 
   if (!_hasHydrated) {
@@ -158,9 +217,9 @@ const Board = () => {
   }
 
   return (
-    <DndContext
+    <DndContext 
       sensors={sensors}
-      collisionDetection={closestCorners}
+      collisionDetection={closestCenter}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
@@ -183,14 +242,18 @@ const Board = () => {
           ) : (
             <div className="relative">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {boardData.columns.map((column) => (
-                  <DroppableColumn
-                    key={column.id}
-                    column={column}
-                    tasks={getTasksByColumn(column.id)}
-                    onAddTask={handleAddTask}
-                  />
-                ))}
+                {boardData.columns.map((column) => {
+                  const columnTasks = getTasksByColumn(column.id);
+                  console.log(`🏛️ Column ${column.id}:`, columnTasks.length, 'tasks');
+                  return (
+                    <DroppableColumn
+                      key={column.id}
+                      column={column}
+                      tasks={columnTasks}
+                      onAddTask={handleAddTask}
+                    />
+                  );
+                })}
               </div>
               {/* Vertical separators for larger screens */}
               <div className="hidden md:block absolute inset-0 pointer-events-none">
@@ -207,14 +270,14 @@ const Board = () => {
             </div>
           )}
         </div>
-      </div>
 
-      {/* Drag Overlay */}
-      <DragOverlay>
-        {activeTask ? (
-          <TaskCard task={activeTask} />
-        ) : null}
-      </DragOverlay>
+        {/* Drag Overlay */}
+        <DragOverlay>
+          {activeTask ? (
+            <TaskCard task={activeTask} />
+          ) : null}
+        </DragOverlay>
+      </div>
     </DndContext>
   );
 };
