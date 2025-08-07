@@ -16,7 +16,7 @@ const DroppableColumn = ({ column, tasks, onAddTask }) => {
       ref={setNodeRef}
       className={`transition-all duration-200 ${
         isOver 
-          ? 'ring-2 ring-blue-300 ring-opacity-50 scale-105' 
+          ? 'ring-2 ring-blue-300 ring-opacity-50' 
           : ''
       }`}
     >
