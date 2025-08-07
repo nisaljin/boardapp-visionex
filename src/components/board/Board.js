@@ -172,56 +172,36 @@ const Board = () => {
         <div className="border-t border-gray-200"></div>
         
         {/* Board Container */}
-        <div className="h-[calc(100vh-120px)] overflow-hidden">
+        <div>
           {isLoading ? (
-            <div className="flex items-center justify-center h-full">
+            <div className="flex items-center justify-center h-64">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading tasks...</p>
               </div>
             </div>
           ) : (
-            <div className="h-full">
-              {/* Mobile: Horizontal scrollable layout */}
-              <div className="md:hidden h-full overflow-x-auto overflow-y-hidden">
-                <div className="flex h-full min-w-max">
-                  {boardData.columns.map((column) => (
-                    <div key={column.id} className="w-80 flex-shrink-0 border-r border-gray-200 last:border-r-0">
-                      <DroppableColumn
-                        column={column}
-                        tasks={getTasksByColumn(column.id)}
-                        onAddTask={handleAddTask}
-                      />
+            <div className="relative">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {boardData.columns.map((column) => (
+                  <DroppableColumn
+                    key={column.id}
+                    column={column}
+                    tasks={getTasksByColumn(column.id)}
+                    onAddTask={handleAddTask}
+                  />
+                ))}
+              </div>
+              {/* Vertical separators for larger screens */}
+              <div className="hidden md:block absolute inset-0 pointer-events-none">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 h-full">
+                  {boardData.columns.map((_, index) => (
+                    <div key={index} className="relative">
+                      {index < boardData.columns.length - 1 && (
+                        <div className="absolute right-0 top-0 bottom-0 w-px bg-gray-200"></div>
+                      )}
                     </div>
                   ))}
-                </div>
-              </div>
-              
-              {/* Desktop: Grid layout */}
-              <div className="hidden md:block h-full">
-                <div className="relative h-full">
-                  <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 h-full">
-                    {boardData.columns.map((column) => (
-                      <DroppableColumn
-                        key={column.id}
-                        column={column}
-                        tasks={getTasksByColumn(column.id)}
-                        onAddTask={handleAddTask}
-                      />
-                    ))}
-                  </div>
-                  {/* Vertical separators for larger screens */}
-                  <div className="absolute inset-0 pointer-events-none">
-                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 h-full">
-                      {boardData.columns.map((_, index) => (
-                        <div key={index} className="relative">
-                          {index < boardData.columns.length - 1 && (
-                            <div className="absolute right-0 top-0 bottom-0 w-px bg-gray-200"></div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
