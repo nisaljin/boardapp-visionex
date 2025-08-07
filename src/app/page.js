@@ -4,10 +4,14 @@ import Header from '@/components/Header';
 import Sidebar from '@/components/sidebar';
 import Board from '@/components/board';
 import HydrationWrapper from '@/components/HydrationWrapper';
+import useBoardStore from '@/lib/store';
 
 export default function Home() {
+  const { setSearchQuery } = useBoardStore();
+
   const handleSearch = (searchTerm) => {
     console.log('Searching for:', searchTerm);
+    setSearchQuery(searchTerm);
   };
 
   const handleCreateBoard = () => {

@@ -29,6 +29,7 @@ const Board = () => {
     addTask,
     moveTask,
     reorderTasksInColumn,
+    searchQuery,
     _hasHydrated 
   } = useBoardStore();
 

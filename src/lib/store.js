@@ -39,10 +39,16 @@ const useBoardStore = create(
       isLoading: false,
       error: null,
       _hasHydrated: false,
+      searchQuery: '',
       
       // Set board data from API
       setBoardData: (data) => {
         set({ boardData: data, isLoading: false, error: null });
+      },
+      
+      // Set search query
+      setSearchQuery: (query) => {
+        set({ searchQuery: query });
       },
       
       // Set loading state
@@ -198,15 +204,45 @@ const useBoardStore = create(
         });
       },
       
-      // Get tasks by column
+      // Get tasks by column (with search filtering)
       getTasksByColumn: (columnId) => {
-        const column = get().boardData.columns.find(col => col.id === columnId);
-        return column ? column.tasks : [];
+        const state = get();
+        const column = state.boardData.columns.find(col => col.id === columnId);
+        if (!column) return [];
+        
+        // If no search query, return all tasks
+        if (!state.searchQuery.trim()) {
+          return column.tasks;
+        }
+        
+        // Filter tasks based on search query
+        const searchLower = state.searchQuery.toLowerCase();
+        return column.tasks.filter(task => 
+          task.title.toLowerCase().includes(searchLower) ||
+          (task.description && task.description.toLowerCase().includes(searchLower)) ||
+          (task.category && task.category.toLowerCase().includes(searchLower)) ||
+          (task.assignee && task.assignee.toLowerCase().includes(searchLower))
+        );
       },
       
-      // Get all tasks
+      // Get all tasks (with search filtering)
       getAllTasks: () => {
-        return get().boardData.columns.flatMap(column => column.tasks);
+        const state = get();
+        const allTasks = state.boardData.columns.flatMap(column => column.tasks);
+        
+        // If no search query, return all tasks
+        if (!state.searchQuery.trim()) {
+          return allTasks;
+        }
+        
+        // Filter tasks based on search query
+        const searchLower = state.searchQuery.toLowerCase();
+        return allTasks.filter(task => 
+          task.title.toLowerCase().includes(searchLower) ||
+          (task.description && task.description.toLowerCase().includes(searchLower)) ||
+          (task.category && task.category.toLowerCase().includes(searchLower)) ||
+          (task.assignee && task.assignee.toLowerCase().includes(searchLower))
+        );
       },
       
       // Set hydration state
@@ -217,7 +253,7 @@ const useBoardStore = create(
     {
       name: 'board-storage', // localStorage key
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ boardData: state.boardData }), // Only persist board data
+      partialize: (state) => ({ boardData: state.boardData }), // Only persist board data, not search query
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
