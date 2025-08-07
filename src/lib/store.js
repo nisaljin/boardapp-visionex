@@ -1,57 +1,86 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
-// Sample task data
+// Enhanced sample task data matching Figma design
 const initialTasks = [
   {
     id: '1',
-    title: 'Design new landing page',
-    description: 'Create wireframes and mockups for the new landing page',
+    title: 'User interview',
+    description: 'Conduct user interviews for the new feature',
     status: 'todo',
-    priority: 'high',
+    priority: 'low',
+    category: 'research',
     assignee: 'John Doe',
     dueDate: '2024-02-15',
-    tags: ['design', 'frontend']
+    attachments: 2,
+    comments: 2,
+    tags: ['research', 'user-testing']
   },
   {
     id: '2',
-    title: 'Implement user authentication',
-    description: 'Add login and registration functionality',
+    title: 'UI Design',
+    description: 'Create wireframes and mockups for the new landing page',
     status: 'in-progress',
     priority: 'high',
+    category: 'design',
     assignee: 'Jane Smith',
     dueDate: '2024-02-20',
-    tags: ['backend', 'security']
+    attachments: 35,
+    comments: 243,
+    tags: ['design', 'frontend'],
+    hasImage: true
   },
   {
     id: '3',
-    title: 'Write API documentation',
-    description: 'Document all API endpoints and their usage',
-    status: 'review',
+    title: 'Prototype',
+    description: 'Build interactive prototype for user testing',
+    status: 'approved',
     priority: 'medium',
+    category: 'interface',
     assignee: 'Mike Johnson',
     dueDate: '2024-02-25',
-    tags: ['documentation', 'api']
+    attachments: 12,
+    comments: 45,
+    tags: ['prototype', 'testing']
   },
   {
     id: '4',
-    title: 'Fix responsive design issues',
-    description: 'Resolve mobile layout problems',
-    status: 'done',
+    title: 'Feedback Collection',
+    description: 'Gather feedback from stakeholders',
+    status: 'reject',
     priority: 'low',
+    category: 'feedback',
     assignee: 'Sarah Wilson',
     dueDate: '2024-02-10',
-    tags: ['frontend', 'responsive']
+    attachments: 5,
+    comments: 18,
+    tags: ['feedback', 'stakeholders']
   },
   {
     id: '5',
-    title: 'Set up CI/CD pipeline',
-    description: 'Configure automated testing and deployment',
+    title: 'Presentation',
+    description: 'Prepare presentation for the client meeting',
     status: 'todo',
-    priority: 'medium',
+    priority: 'high',
+    category: 'presentation',
     assignee: 'Alex Brown',
     dueDate: '2024-03-01',
-    tags: ['devops', 'automation']
+    attachments: 8,
+    comments: 12,
+    tags: ['presentation', 'client']
+  },
+  {
+    id: '6',
+    title: 'Market Research',
+    description: 'Analyze competitor products and market trends',
+    status: 'in-progress',
+    priority: 'medium',
+    category: 'research',
+    assignee: 'Emma Davis',
+    dueDate: '2024-02-28',
+    attachments: 15,
+    comments: 67,
+    tags: ['research', 'market-analysis']
   }
 ];
 
@@ -60,6 +89,7 @@ const useTaskStore = create(
     (set, get) => ({
       tasks: initialTasks,
       searchQuery: '',
+      _hasHydrated: false, // Add hydration flag
       
       // Add a new task
       addTask: (task) => {
@@ -115,11 +145,20 @@ const useTaskStore = create(
       getTasksByStatus: (status) => {
         const filteredTasks = get().getFilteredTasks();
         return filteredTasks.filter((task) => task.status === status);
+      },
+
+      // Set hydration state
+      setHasHydrated: (state) => {
+        set({ _hasHydrated: state });
       }
     }),
     {
       name: 'task-storage', // localStorage key
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ tasks: state.tasks }), // Only persist tasks
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

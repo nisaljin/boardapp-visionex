@@ -9,23 +9,23 @@ export const SWIMLANES = [
   {
     id: 'in-progress',
     title: 'In Progress',
-    color: 'bg-blue-100',
-    borderColor: 'border-blue-200',
-    textColor: 'text-blue-700'
+    color: 'bg-orange-500',
+    borderColor: 'border-orange-500',
+    textColor: 'text-white'
   },
   {
-    id: 'review',
-    title: 'Review',
-    color: 'bg-yellow-100',
-    borderColor: 'border-yellow-200',
-    textColor: 'text-yellow-700'
+    id: 'approved',
+    title: 'Approved',
+    color: 'bg-green-500',
+    borderColor: 'border-green-500',
+    textColor: 'text-white'
   },
   {
-    id: 'done',
-    title: 'Done',
-    color: 'bg-green-100',
-    borderColor: 'border-green-200',
-    textColor: 'text-green-700'
+    id: 'reject',
+    title: 'Reject',
+    color: 'bg-red-500',
+    borderColor: 'border-red-500',
+    textColor: 'text-white'
   }
 ];
 
@@ -39,4 +39,22 @@ export const PRIORITY_LABELS = {
   high: 'High',
   medium: 'Medium',
   low: 'Low'
+};
+
+export const CATEGORY_COLORS = {
+  research: 'bg-green-500',
+  design: 'bg-red-500',
+  feedback: 'bg-blue-500',
+  presentation: 'bg-orange-500',
+  interface: 'bg-gray-800',
+  other: 'bg-gray-600'
+};
+
+export const CATEGORY_LABELS = {
+  research: 'Research',
+  design: 'Design',
+  feedback: 'Feedback',
+  presentation: 'Presentation',
+  interface: 'Interface',
+  other: 'Other'
 }; 
