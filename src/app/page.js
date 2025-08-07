@@ -2,6 +2,7 @@
 
 import Header from '@/components/Header';
 import Sidebar from '@/components/sidebar';
+import { ProjectHeading } from '@/components/board';
 
 export default function Home() {
   const handleSearch = (searchTerm) => {
@@ -43,10 +44,8 @@ export default function Home() {
         <Sidebar />
         
         {/* Content Area */}
-        <main className="flex-1 bg-gray-50 flex items-center justify-center">
-          <div className="text-gray-500 text-lg">
-            Content area - Add components here gradually
-          </div>
+        <main className="flex-1 bg-gray-50">
+          <ProjectHeading />
         </main>
       </div>
     </div>
