@@ -30,23 +30,23 @@ const ProjectHeading = () => {
           {/* User Avatars - Overlapping */}
           <div className="flex items-center">
             {/* User 1 */}
-            <div className="w-6 h-6 bg-gray-700 rounded-full border-2 border-white flex items-center justify-center relative z-30">
+            <div className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center relative z-30">
               <Image 
-                src="/assets/icons/Image Field.png" 
+                src="/assets/icons/assigneduser.png" 
                 alt="User 1" 
-                width={10} 
-                height={10}
-                className="opacity-80"
+                width={25} 
+                height={25}
+                className=""
               />
             </div>
             
             {/* User 2 */}
             <div className="w-6 h-6 bg-gray-700 rounded-full border-2 border-white flex items-center justify-center relative -ml-1 z-20">
               <Image 
-                src="/assets/icons/Image Field.png" 
+                src="/assets/icons/assigneduser.png" 
                 alt="User 2" 
-                width={10} 
-                height={10}
+                width={25} 
+                height={25}
                 className="opacity-80"
               />
             </div>
@@ -54,10 +54,10 @@ const ProjectHeading = () => {
             {/* User 3 */}
             <div className="w-6 h-6 bg-gray-700 rounded-full border-2 border-white flex items-center justify-center relative -ml-1 z-10">
               <Image 
-                src="/assets/icons/Image Field.png" 
+                src="/assets/icons/assigneduser.png" 
                 alt="User 3" 
-                width={10} 
-                height={10}
+                width={25} 
+                height={25}
                 className="opacity-80"
               />
             </div>
