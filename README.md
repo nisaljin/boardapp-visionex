@@ -1,151 +1,152 @@
-# Task Board App - Kanban Style Project Management
+# 🧩 Task Board App – Kanban-Style Project Management
 
-A modern, responsive Kanban board application built with Next.js, featuring drag-and-drop functionality, real-time search, and persistent data storage.
+A modern, responsive Kanban board built with **Next.js**, featuring seamless drag-and-drop, real-time search, and persistent local data storage.
 
-## 🚀 Features
+📍 **Live Demo**: [https://boardapp-visionex.vercel.app](https://boardapp-visionex.vercel.app)
 
-### ✅ Completed Features
-- **UI Implementation**: Pixel-perfect responsive design using TailwindCSS
-- **Swimlane Features**: Four status-based columns (To Do, In Progress, Review, Done)
-- **Drag-and-Drop Functionality**: Seamless task movement between swimlanes using @dnd-kit
-- **State Management**: Zustand store with localStorage persistence
-- **Prepopulate Data**: Sample tasks with realistic data
-- **Data Persistence**: Automatic saving to localStorage
-- **Search Task**: Real-time filtering across all swimlanes
+---
 
-### 🎯 Technical Requirements Met
-- ✅ Next.js framework
-- ✅ JavaScript implementation
-- ✅ TailwindCSS styling
-- ✅ Responsive design (up to 768px)
-- ✅ Cross-browser compatibility
-- ✅ Zustand for state management
-- ✅ @dnd-kit for drag-and-drop
-- ✅ localStorage persistence
-- ✅ Real-time search functionality
+## ✅ Features Overview
+
+### UI & UX
+- **Pixel-perfect layout** based on provided Figma design
+- **Responsive** up to 768px (mobile/tablet)
+- **TailwindCSS** styling with clean, modern UI
+- **Cross-browser compatibility**
+
+### Core Functionality
+- 🗂 **Swimlanes**: Tasks grouped by status (To Do, In Progress, Review, Done)
+- 🧩 **Drag-and-Drop**: Move tasks between swimlanes with `@dnd-kit`
+- ⚙️ **State Management**: Zustand for global state + `localStorage` persistence
+- 📁 **Mock Data API**: Prepopulated tasks fetched from a static JSON endpoint
+- 🔎 **Search**: Real-time, dynamic task filtering across all columns
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14
-- **Language**: JavaScript
-- **Styling**: TailwindCSS
-- **State Management**: Zustand
-- **Drag & Drop**: @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/modifiers
-- **Data Persistence**: localStorage
+| Category         | Tools Used                                                    |
+|------------------|---------------------------------------------------------------|
+| Framework        | Next.js 14 (App Router)                                       |
+| Language         | JavaScript                                                    |
+| Styling          | TailwindCSS                                                   |
+| Drag & Drop      | `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/modifiers`    |
+| State Management | Zustand + `localStorage` persistence                          |
+| Deployment       | Vercel                                                        |
 
-## 📦 Installation
+---
 
-1. Clone the repository:
+## 📦 Getting Started
+
+### Installation
+
 ```bash
-git clone <repository-url>
+git clone https://github.com/yourusername/boardapp-visionex.git
 cd boardapp-visionex
-```
-
-2. Install dependencies:
-```bash
 npm install
-```
-
-3. Run the development server:
-```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 🎮 Usage
-
-### Task Management
-- **View Tasks**: Tasks are organized in four swimlanes based on their status
-- **Move Tasks**: Drag and drop tasks between swimlanes to update their status
-- **Search**: Use the search bar to filter tasks by title, description, assignee, or tags
-- **Persistent Data**: All changes are automatically saved to localStorage
-
-### Task Information
-Each task displays:
-- Title and description
-- Priority level (High, Medium, Low)
-- Assignee with avatar
-- Due date
-- Tags
+---
 
 ## 📁 Project Structure
 
 ```
 src/
 ├── app/
-│   ├── globals.css          # Global styles
-│   ├── layout.js           # Root layout
-│   └── page.js             # Main page
+│   ├── globals.css        # Global styles
+│   ├── layout.js          # App layout wrapper
+│   └── page.js            # Main board page
 ├── components/
-│   ├── Board.js            # Main board component
-│   ├── Swimlane.js         # Individual swimlane
-│   ├── TaskCard.js         # Task card component
-│   └── SearchBar.js        # Search functionality
+│   ├── Board.js           # Core board layout
+│   ├── Swimlane.js        # Column for each task status
+│   ├── TaskCard.js        # Individual draggable task
+│   └── SearchBar.js       # Search input & filtering logic
 └── lib/
-    ├── constants.js        # Configuration constants
-    └── store.js           # Zustand store
+    ├── constants.js       # Static values (statuses, colors, etc.)
+    └── store.js           # Zustand store with localStorage integration
 ```
 
-## 🔧 Development
+---
 
-### Key Components
+## 🔄 Application Flow
 
-1. **Board.js**: Main orchestrator with DndContext
-2. **Swimlane.js**: Drop zones for each status column
-3. **TaskCard.js**: Draggable task items
-4. **SearchBar.js**: Real-time search with debouncing
-5. **store.js**: Zustand store with persistence
+1. **Initialization**
+   - Loads tasks from `localStorage` if available.
+   - Falls back to mock JSON data (`/data/tasks.json`) on first load.
 
-### State Management
-- Tasks are stored in Zustand with localStorage persistence
-- Search state is managed locally with debouncing
-- Drag and drop updates task status automatically
+2. **Task Management**
+   - Tasks are grouped in four swimlanes: To Do, In Progress, Review, Done.
+   - Tasks include metadata like title, description, assignee, tags, and due date.
 
-## 🎨 Design Features
+3. **Drag-and-Drop**
+   - Drag tasks between swimlanes using `@dnd-kit`.
+   - Zustand store updates the task status.
+   - Changes are saved to `localStorage` automatically.
 
-- **Responsive Layout**: Adapts to different screen sizes
-- **Color-coded Priorities**: Visual priority indicators
-- **Smooth Animations**: Hover effects and drag feedback
-- **Clean UI**: Modern, minimalist design
-- **Accessibility**: Proper ARIA labels and keyboard support
+4. **Search**
+   - Tasks are filtered in real time as the user types.
+   - Search covers title, description, assignee, and tags.
 
-## 📱 Responsive Design
+---
 
-The application is fully responsive and optimized for:
-- Desktop screens (1200px+)
-- Tablet screens (768px - 1199px)
-- Mobile screens (up to 767px)
+## 🎨 Design & Accessibility
 
-## 🔄 Data Flow
+- **Modern UI**: Minimalist, clean design using Tailwind utility classes
+- **Color-coded priorities**: Visual indicators for task urgency
+- **Responsive layout**: Mobile and tablet friendly (up to 768px)
+- **Accessibility**: ARIA roles, keyboard navigability, and semantic structure
 
-1. **Initial Load**: Tasks loaded from localStorage or default data
-2. **Drag & Drop**: Task status updated in store
-3. **Search**: Real-time filtering of tasks
-4. **Persistence**: All changes automatically saved to localStorage
+---
+
+## 🧪 Completed Technical Requirements
+
+- ✅ Next.js with App Router
+- ✅ Zustand for state management
+- ✅ TailwindCSS styling
+- ✅ Drag-and-drop with `@dnd-kit`
+- ✅ JSON mock data source
+- ✅ LocalStorage persistence
+- ✅ Real-time task search
+- ✅ Responsive layout (768px and below)
+- ✅ Cross-browser compatibility
+- ✅ Clean, incremental Git commits
+
+---
 
 ## 🚀 Deployment
 
-The application can be deployed to any platform that supports Next.js:
+To build and deploy:
 
 ```bash
 npm run build
 npm start
 ```
 
-## 📝 Future Enhancements
+App is deployed at: [https://boardapp-visionex.vercel.app](https://boardapp-visionex.vercel.app)
 
-- Task creation and editing
+---
+
+## 🚧 Future Enhancements
+
+- Task creation & editing
 - User authentication
+- Board and workspace management
 - Team collaboration features
-- Advanced filtering options
-- Task comments and attachments
-- Export/import functionality
+- Commenting and attachments
+- Import/export functionality
+- Advanced filters and tags
+
+---
 
 ## 🤝 Contributing
 
-This is a practical assignment demonstrating modern web development practices with Next.js and React.
+This project was developed as a practical coding assignment to demonstrate frontend engineering skills using modern web technologies.
+
+---
 
 ## 📄 License
 
-This project is created for educational and demonstration purposes.
+This project is intended for educational and demonstration purposes only.
