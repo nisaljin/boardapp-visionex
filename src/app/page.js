@@ -1,6 +1,7 @@
 'use client';
 
 import Header from '@/components/Header';
+import Sidebar from '@/components/sidebar';
 
 export default function Home() {
   const handleSearch = (searchTerm) => {
@@ -25,18 +26,29 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col">
-      <Header 
-        onSearch={handleSearch}
-        onCreateBoard={handleCreateBoard}
-        onFilter={handleFilter}
-        onNotifications={handleNotifications}
-        onUserProfile={handleUserProfile}
-      />
-      <main className="flex-1 bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500 text-lg">
-          Content area - Add components here gradually
-        </div>
-      </main>
+      {/* Header - Centered */}
+      <div className="flex justify-center">
+        <Header 
+          onSearch={handleSearch}
+          onCreateBoard={handleCreateBoard}
+          onFilter={handleFilter}
+          onNotifications={handleNotifications}
+          onUserProfile={handleUserProfile}
+        />
+      </div>
+      
+      {/* Main Content with Sidebar */}
+      <div className="flex-1 flex">
+        {/* Sidebar */}
+        <Sidebar />
+        
+        {/* Content Area */}
+        <main className="flex-1 bg-gray-50 flex items-center justify-center">
+          <div className="text-gray-500 text-lg">
+            Content area - Add components here gradually
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

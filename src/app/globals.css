@@ -4,6 +4,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom color classes */
+.text-custom-gray {
+  color: #777E90;
+}
+
+.text-custom-blue {
+  color: #3772FF;
+}
+
+.bg-custom-blue {
+  background-color: #3772FF;
+}
+
+/* Icon color filters */
+.icon-blue {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+}
+
+/* Alternative blue filter for sidebar icons */
+.icon-blue-alt {
+  filter: brightness(0) saturate(100%) invert(35%) sepia(100%) saturate(1000%) hue-rotate(200deg) brightness(100%) contrast(100%);
+}
+
+.icon-white {
+  filter: brightness(0) invert(1);
+}
+
+/* Filter for lighter icons (like the new Message icon) */
+.icon-fill-gray {
+  filter: brightness(0) saturate(100%) invert(47%) sepia(8%) saturate(1234%) hue-rotate(202deg) brightness(94%) contrast(86%);
+}
+
+/* Ensure icons are crisp */
+.icon-crisp {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
 /* Custom styles for line clamping */
 @layer utilities {
   .line-clamp-2 {

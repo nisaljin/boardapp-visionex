@@ -8,7 +8,7 @@ const Logo = () => {
         alt="Board App Logo" 
         className="w-6 h-6"
       />
-      <div className="text-lg font-semibold">
+      <div className="text-xs font-medium font-poppins">
         <span className="text-gray-700">Board</span>
         <span className="text-[#3772FF]"> App</span>
       </div>
