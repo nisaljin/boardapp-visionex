@@ -23,9 +23,9 @@ const BoardColumn = ({ column, tasks, onAddTask }) => {
   const columnColor = getColumnColor(column.title);
 
   return (
-    <div className="w-full h-full flex flex-col">
-      {/* Column Header with white background */}
-      <div className="bg-white">
+    <div className="w-full h-full flex flex-col min-h-0">
+      {/* Column Header with white background - Fixed height */}
+      <div className="bg-white flex-shrink-0">
         <div className="flex items-center justify-between mb-4 mt-4 px-6">
           <div className="flex items-center space-x-3">
             {/* Column Title Button */}
@@ -80,34 +80,38 @@ const BoardColumn = ({ column, tasks, onAddTask }) => {
         <div className="border-t border-gray-200"></div>
       </div>
       
-      {/* Tasks Container with gray background */}
-      <div className="flex-1 bg-gray-50">
+      {/* Tasks Container - Scrollable area */}
+      <div className="flex-1 bg-gray-50 min-h-0 relative">
         <SortableContext items={tasks.map(task => task.id)} strategy={verticalListSortingStrategy}>
-          <div className="min-h-[200px] max-h-[calc(100vh-450px)] overflow-y-auto">
-            <div className="space-y-3.5 pb-6 px-6 pt-4">
-              {tasks.map((task) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task} 
-                  isHighlighted={task.isHighlighted}
-                />
-              ))}
-              
-              {/* Empty State */}
-              {tasks.length === 0 && (
-                <div className="flex items-center justify-center h-32 text-gray-400">
-                  <div className="text-center">
-                    <Image 
-                      src="/assets/icons/Plus 2.png" 
-                      alt="Add Task" 
-                      width={24} 
-                      height={24}
-                      className="mx-auto mb-2 opacity-40"
-                    />
-                    <p className="text-sm">No tasks yet</p>
+          {/* Scrollable container with absolute positioning for perfect height control */}
+          <div className="absolute inset-0 overflow-y-auto">
+            <div className="min-h-full">
+              {/* Task list with proper spacing */}
+              <div className="space-y-3.5 pt-6 px-6 pb-24">
+                {tasks.map((task) => (
+                  <TaskCard 
+                    key={task.id} 
+                    task={task} 
+                    isHighlighted={task.isHighlighted}
+                  />
+                ))}
+                
+                {/* Empty State - only show when no tasks */}
+                {tasks.length === 0 && (
+                  <div className="flex items-center justify-center min-h-[200px] text-gray-400 -mt-6">
+                    <div className="text-center">
+                      <Image 
+                        src="/assets/icons/Plus 2.png" 
+                        alt="Add Task" 
+                        width={24} 
+                        height={24}
+                        className="mx-auto mb-2 opacity-40"
+                      />
+                      <p className="text-sm">No tasks yet</p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </SortableContext>

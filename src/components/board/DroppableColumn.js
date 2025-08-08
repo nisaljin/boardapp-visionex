@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import BoardColumn from './BoardColumn';
 
-const DroppableColumn = ({ column, tasks, onAddTask }) => {
+const DroppableColumn = memo(({ column, tasks, onAddTask }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: column.id,
     data: {
@@ -27,6 +27,8 @@ const DroppableColumn = ({ column, tasks, onAddTask }) => {
       />
     </div>
   );
-};
+});
+
+DroppableColumn.displayName = 'DroppableColumn';
 
 export default DroppableColumn; 

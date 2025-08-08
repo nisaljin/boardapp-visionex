@@ -62,8 +62,8 @@ const TaskCard = ({ task, isHighlighted = false }) => {
       {...attributes}
       {...listeners}
       className={`bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4 cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow ${
-        isHighlighted ? 'ring-2 ring-purple-500' : ''
-      } ${isDragging ? 'shadow-lg' : ''} w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px] lg:max-w-[400px] ${
+        isDragging ? 'shadow-lg' : ''
+      } w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px] lg:max-w-[400px] ${
         task.hasAttachment ? 'min-h-[180px] sm:min-h-[200px] md:min-h-[220px] lg:min-h-[240px]' : 'min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px]'
       } flex flex-col`}
     >
@@ -187,8 +187,8 @@ const TaskCard = ({ task, isHighlighted = false }) => {
                   <Image 
                     src="/assets/icons/link.png" 
                     alt="Links" 
-                    width={12} 
-                    height={12}
+                    width={16} 
+                    height={16}
                     className="opacity-60"
                   />
                   <span className="text-sm text-gray-600">{task.links}</span>
@@ -201,25 +201,43 @@ const TaskCard = ({ task, isHighlighted = false }) => {
                   <Image 
                     src="/assets/icons/Message.png" 
                     alt="Comments" 
-                    width={12} 
-                    height={12}
+                    width={16} 
+                    height={16}
                     className="opacity-60"
                   />
                   <span className="text-sm text-gray-600">{task.comments}</span>
                 </div>
               )}
               
+              {/* Group Call */}
+              {task.action === 'Group Call' && (
+                <div className="flex items-center space-x-1">
+                  <Image 
+                    src="/assets/icons/Bell.png" 
+                    alt="Group Call" 
+                    width={16} 
+                    height={16}
+                    style={{ filter: 'brightness(0) saturate(100%) invert(29%) sepia(86%) saturate(2696%) hue-rotate(227deg) brightness(98%) contrast(105%)' }}
+                  />
+                  <span className="text-sm" style={{ color: '#3772FF' }}>Group Call</span>
+                </div>
+              )}
+              
               {/* Reports */}
               {task.reports > 0 && (
                 <div className="flex items-center space-x-1">
-                  <Image 
-                    src="/assets/icons/Circle Notification.png" 
-                    alt="Reports" 
-                    width={12} 
-                    height={12}
-                    className="text-red-500"
-                  />
-                  <span className="text-sm text-red-500">{task.reports} Reports</span>
+                  <svg 
+                    width="16" 
+                    height="16" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="12" cy="12" r="10" stroke="#F90430" strokeWidth="2"/>
+                    <path d="m12 16 v-4" stroke="#F90430" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="m12 8 h.01" stroke="#F90430" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  <span className="text-sm" style={{ color: '#F90430' }}>{task.reports} Reports</span>
                 </div>
               )}
             </div>
@@ -237,7 +255,7 @@ const TaskCard = ({ task, isHighlighted = false }) => {
                   />
                   <span className="text-sm text-gray-600">Due: {task.dueDate}</span>
                 </>
-              ) : task.action ? (
+              ) : task.action === 'Stream' ? (
                 <>
                   <Image 
                     src={getActionIcon(task.action)} 

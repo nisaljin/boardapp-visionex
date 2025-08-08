@@ -70,15 +70,27 @@ html, body {
 }
 
 .overflow-y-auto::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
   border-radius: 3px;
 }
 
 .overflow-y-auto::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: #d1d5db;
   border-radius: 3px;
+  transition: background-color 0.2s ease;
 }
 
 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: #9ca3af;
+}
+
+/* Firefox scrollbar styling */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+/* Smooth scrolling behavior */
+.overflow-y-auto {
+  scroll-behavior: smooth;
 }

@@ -10,24 +10,24 @@ export default function Home() {
   const { setSearchQuery } = useBoardStore();
 
   const handleSearch = (searchTerm) => {
-    console.log('Searching for:', searchTerm);
+    // console.log('Searching for:', searchTerm);
     setSearchQuery(searchTerm);
   };
 
   const handleCreateBoard = () => {
-    console.log('Create new board clicked');
+    // Create new board functionality
   };
 
   const handleFilter = () => {
-    console.log('Filter clicked');
+    // Filter functionality
   };
 
   const handleNotifications = () => {
-    console.log('Notifications clicked');
+    // Notifications functionality
   };
 
   const handleUserProfile = () => {
-    console.log('User profile clicked');
+    // User profile functionality
   };
 
   return (

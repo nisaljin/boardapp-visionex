@@ -68,7 +68,7 @@ const useBoardStore = create(
             ...state.boardData,
             columns: state.boardData.columns.map((column) =>
               column.id === columnId
-                ? { ...column, tasks: [...column.tasks, { ...task, id: Date.now().toString() }] }
+                ? { ...column, tasks: [...column.tasks, { ...task, id: task.id || Date.now().toString() }] }
                 : column
             )
           }
@@ -105,31 +105,18 @@ const useBoardStore = create(
       
       // Move task between columns
       moveTask: (taskId, fromColumnId, toColumnId) => {
-        console.log('moveTask called with:', { taskId, fromColumnId, toColumnId });
-        
         set((state) => {
           const fromColumn = state.boardData.columns.find(col => col.id === fromColumnId);
           const toColumn = state.boardData.columns.find(col => col.id === toColumnId);
           
-          console.log('Found columns:', { 
-            fromColumn: fromColumn?.id, 
-            toColumn: toColumn?.id,
-            fromColumnTasks: fromColumn?.tasks.length,
-            toColumnTasks: toColumn?.tasks.length
-          });
-          
           if (!fromColumn || !toColumn) {
-            console.log('Column not found, returning state');
             return state;
           }
           
           const task = fromColumn.tasks.find(t => t.id === taskId);
           if (!task) {
-            console.log('Task not found, returning state');
             return state;
           }
-          
-          console.log('Found task:', task.title, 'Moving from', fromColumnId, 'to', toColumnId);
           
           const newState = {
             boardData: {
@@ -152,24 +139,16 @@ const useBoardStore = create(
             }
           };
           
-          console.log('New state columns:', newState.boardData.columns.map(col => ({
-            id: col.id,
-            taskCount: col.tasks.length
-          })));
-          
           return newState;
         });
       },
 
       // Reorder tasks within the same column
       reorderTasksInColumn: (columnId, activeTaskId, overTaskId) => {
-        console.log('reorderTasksInColumn called with:', { columnId, activeTaskId, overTaskId });
-        
         set((state) => {
           const column = state.boardData.columns.find(col => col.id === columnId);
           
           if (!column) {
-            console.log('Column not found, returning state');
             return state;
           }
           
@@ -178,11 +157,8 @@ const useBoardStore = create(
           const overIndex = tasks.findIndex(task => task.id === overTaskId);
           
           if (activeIndex === -1 || overIndex === -1) {
-            console.log('Task not found in column, returning state');
             return state;
           }
-          
-          console.log('Reordering from index', activeIndex, 'to index', overIndex);
           
           // Use arrayMove from @dnd-kit/sortable
           const reorderedTasks = arrayMove(tasks, activeIndex, overIndex);
@@ -197,8 +173,6 @@ const useBoardStore = create(
               )
             }
           };
-          
-          console.log('Tasks reordered in column:', columnId);
           
           return newState;
         });

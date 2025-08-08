@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -71,11 +71,8 @@ const Board = () => {
     if (_hasHydrated && !isInitialized) {
       // Check if we have data in localStorage
       const hasStoredData = boardData.columns.some(col => col.tasks.length > 0);
-      console.log('🔍 Has stored data:', hasStoredData);
-      console.log('📊 Board data:', boardData);
       
       if (!hasStoredData) {
-        console.log('🌐 Fetching board data from API...');
         fetchBoardData();
       }
       
@@ -84,7 +81,7 @@ const Board = () => {
   }, [_hasHydrated, isInitialized, boardData.columns]);
 
   // Handle adding new task
-  const handleAddTask = (columnId) => {
+  const handleAddTask = useCallback((columnId) => {
     const newTask = {
       id: Date.now().toString(),
       title: 'New Task',
@@ -98,47 +95,43 @@ const Board = () => {
     };
     
     addTask(columnId, newTask);
-  };
+  }, [addTask]);
+
+  // Memoize getAllTasks function
+  const getAllTasks = useMemo(() => {
+    return boardData.columns.flatMap(column => column.tasks);
+  }, [boardData.columns]);
 
   // Handle drag start
-  const handleDragStart = (event) => {
+  const handleDragStart = useCallback((event) => {
     const { active } = event;
-    console.log('🚀 Drag start event:', { active });
-    const task = getAllTasks().find(t => t.id === active.id);
-    console.log('🎯 Found task:', task);
+    const task = getAllTasks.find(t => t.id === active.id);
     setActiveTask(task);
-  };
+  }, [getAllTasks]);
 
   // Handle drag end
-  const handleDragEnd = (event) => {
+  const handleDragEnd = useCallback((event) => {
     const { active, over } = event;
     setActiveTask(null);
 
-    console.log('Drag end event:', { active, over });
-
     if (!over) {
-      console.log('No over target, returning');
       return;
     }
 
     const activeId = active.id;
     const overId = over.id;
 
-    console.log('Active ID:', activeId, 'Over ID:', overId);
-
     if (activeId === overId) {
-      console.log('Same ID, returning');
       return;
     }
 
     // Find the active task and its current column
-    const activeTask = getAllTasks().find(task => task.id === activeId);
+    const activeTask = getAllTasks.find(task => task.id === activeId);
     const activeColumn = boardData.columns.find(col => 
       col.tasks.some(task => task.id === activeId)
     );
 
     if (!activeTask || !activeColumn) {
-      console.log('Active task or column not found');
       return;
     }
 
@@ -149,7 +142,6 @@ const Board = () => {
       // Dropped on a column - move to end of that column
       const targetColumnId = overId;
       if (activeColumn.id !== targetColumnId) {
-        console.log('Moving task to column:', targetColumnId);
         moveTask(activeId, activeColumn.id, targetColumnId);
       }
     } else if (overData?.type === 'task') {
@@ -160,35 +152,24 @@ const Board = () => {
       );
 
       if (!overColumn) {
-        console.log('Over column not found');
         return;
       }
 
       if (activeColumn.id === overColumn.id) {
         // Same column - reorder
-        console.log('Reordering within column:', activeColumn.id);
         reorderTasksInColumn(activeColumn.id, activeId, overId);
       } else {
         // Different column - move task
-        console.log('Moving task from', activeColumn.id, 'to', overColumn.id);
         moveTask(activeId, activeColumn.id, overColumn.id);
       }
     } else {
       // Fallback - try to determine column by overId
       const overColumn = boardData.columns.find(col => col.id === overId);
       if (overColumn && activeColumn.id !== overColumn.id) {
-        console.log('Fallback: Moving task to column:', overId);
         moveTask(activeId, activeColumn.id, overId);
       }
     }
-  };
-
-  // Get all tasks from all columns
-  const getAllTasks = () => {
-    const allTasks = boardData.columns.flatMap(column => column.tasks);
-    console.log('📋 Total tasks:', allTasks.length);
-    return allTasks;
-  };
+  }, [getAllTasks, boardData.columns, moveTask, reorderTasksInColumn]);
 
   if (!_hasHydrated) {
     return (
@@ -224,28 +205,27 @@ const Board = () => {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="min-h-screen bg-white">
+      <div className="h-screen bg-white flex flex-col">
         {/* Project Heading */}
         <ProjectHeading />
         
         {/* Separator */}
         <div className="border-t border-gray-200"></div>
         
-        {/* Board Container */}
-        <div>
+        {/* Board Container - Takes remaining height */}
+        <div className="flex-1 w-full">
           {isLoading ? (
-            <div className="flex items-center justify-center h-64">
+            <div className="flex items-center justify-center h-full">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading tasks...</p>
               </div>
             </div>
           ) : (
-            <div className="relative">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="relative w-full h-full">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full h-full">
                 {boardData.columns.map((column) => {
                   const columnTasks = getTasksByColumn(column.id);
-                  console.log(`🏛️ Column ${column.id}:`, columnTasks.length, 'tasks');
                   return (
                     <DroppableColumn
                       key={column.id}
