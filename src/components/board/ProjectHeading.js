@@ -30,41 +30,41 @@ const ProjectHeading = () => {
           {/* User Avatars - Overlapping */}
           <div className="flex items-center">
             {/* User 1 */}
-            <div className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center relative z-30">
+            <div className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center relative z-0 overflow-hidden">
               <Image 
                 src="/assets/icons/assigneduser.png" 
                 alt="User 1" 
-                width={25} 
-                height={25}
-                className=""
+                width={32} 
+                height={32}
+                className="object-cover"
               />
             </div>
             
             {/* User 2 */}
-            <div className="w-6 h-6 bg-gray-700 rounded-full border-2 border-white flex items-center justify-center relative -ml-1 z-20">
+            <div className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center relative -ml-3 z-10 overflow-hidden">
               <Image 
                 src="/assets/icons/assigneduser.png" 
                 alt="User 2" 
-                width={25} 
-                height={25}
-                className="opacity-80"
+                width={32} 
+                height={32}
+                className="object-cover"
               />
             </div>
             
             {/* User 3 */}
-            <div className="w-6 h-6 bg-gray-700 rounded-full border-2 border-white flex items-center justify-center relative -ml-1 z-10">
+            <div className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center relative -ml-3 z-20 overflow-hidden">
               <Image 
                 src="/assets/icons/assigneduser.png" 
                 alt="User 3" 
-                width={25} 
-                height={25}
-                className="opacity-80"
+                width={32} 
+                height={32}
+                className="object-cover"
               />
             </div>
             
             {/* +2 More Users */}
-            <div className="w-6 h-6 bg-gray-200 rounded-full border-2 border-white flex items-center justify-center relative -ml-1 z-0">
-              <span className="text-xs text-gray-700 font-medium">+2</span>
+            <div className="w-8 h-8 bg-gray-300 rounded-full border-2 border-white flex items-center justify-center relative -ml-3 z-30">
+              <span className="text-sm text-gray-600 font-semibold">+2</span>
             </div>
           </div>
         </div>

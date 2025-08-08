@@ -102,18 +102,36 @@ const TaskCard = ({ task, isHighlighted = false }) => {
           {/* Assignees and Priority Row */}
           <div className="flex items-center space-x-2 sm:space-x-3">
             {/* Assignees */}
-            <div className="flex items-center space-x-1">
-              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gray-700 rounded-full border border-white flex items-center justify-center">
+            <div className="flex items-center">
+              {/* User 1 */}
+              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-white rounded-full border border-white flex items-center justify-center relative z-0 overflow-hidden">
                 <Image 
-                  src="/assets/icons/profileuser.png" 
-                  alt="Assignee" 
-                  width={10} 
-                  height={10}
-                  className="opacity-80"
+                  src="/assets/icons/assigneduser.png" 
+                  alt="Assignee 1" 
+                  width={20} 
+                  height={20}
+                  className="object-cover"
                 />
               </div>
+              
+              {/* User 2 (if more than 1 assignee) */}
               {task.assignees > 1 && (
-                <span className="text-sm text-gray-600 ml-1">+{task.assignees - 1}</span>
+                <div className="w-5 h-5 sm:w-6 sm:h-6 bg-white rounded-full border border-white flex items-center justify-center relative -ml-2 z-10 overflow-hidden">
+                  <Image 
+                    src="/assets/icons/assigneduser.png" 
+                    alt="Assignee 2" 
+                    width={20} 
+                    height={20}
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              
+              {/* +X More (if more than 2 assignees) */}
+              {task.assignees > 2 && (
+                <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gray-300 rounded-full border border-white flex items-center justify-center relative -ml-2 z-20">
+                  <span className="text-xs text-gray-600 font-semibold">+{task.assignees - 2}</span>
+                </div>
               )}
             </div>
             
